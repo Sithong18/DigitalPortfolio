@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>SITHONG // DIGITAL ARCHITECT ⬡</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="sithong-style.css" />
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="text/javascript">
+    // ─── EMAILJS CONFIG ──────────────────────────────────────────────────────────
+    // 1. Sign up free at https://www.emailjs.com
+    // 2. Create an Email Service (Gmail, Outlook, etc.) → copy the Service ID
+    // 3. Create an Email Template → copy the Template ID
+    // 4. Go to Account → API Keys → copy your Public Key
+    // Replace the three placeholder strings below with your real values:
+    window.EMAILJS_PUBLIC_KEY  = "OxXyfkNXuC0QS5Cag";   // e.g. "abc123XYZ"
+    window.EMAILJS_SERVICE_ID  = "service_pnwa1vq";   // e.g. "service_xxxxxx"
+    window.EMAILJS_TEMPLATE_ID = "template_73ablob";  // e.g. "template_xxxxxx"
+    // ─────────────────────────────────────────────────────────────────────────────
+    (function(){ emailjs.init({ publicKey: window.EMAILJS_PUBLIC_KEY }); })();
+  </script>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='50,5 95,27.5 95,72.5 50,95 5,72.5 5,27.5' fill='none' stroke='%2300ffcc' stroke-width='4'/><text y='65' x='50' text-anchor='middle' font-size='42' font-family='monospace' fill='%2300ffcc' font-weight='900'>S</text></svg>" />
+</head>
+<body>
+
+<!-- BOOT SEQUENCE -->
+<div id="bootScreen">
+  <canvas id="bootCanvas"></canvas>
+  <div class="boot-ui">
+    <div class="boot-hex">⬡</div>
+    <div class="boot-lines">
+      <div class="boot-line" data-delay="0">SITHONG NEURAL INTERFACE v7.4.2</div>
+      <div class="boot-line" data-delay="200">> INITIALIZING QUANTUM RENDER ENGINE...</div>
+      <div class="boot-line" data-delay="600">> CALIBRATING HUD SUBSYSTEMS...</div>
+      <div class="boot-line" data-delay="1000">> ESTABLISHING UPLINK: VIENTIANE NODE</div>
+      <div class="boot-line" data-delay="1400">> LOADING CONSCIOUSNESS MATRIX...</div>
+      <div class="boot-line boot-ok" data-delay="1800">> ALL SYSTEMS NOMINAL ✓</div>
+    </div>
+    <div class="boot-bar-wrap">
+      <div class="boot-bar" id="bootBar"></div>
+      <span class="boot-pct" id="bootPct">0%</span>
+    </div>
+    <div class="boot-sig">PRESS ANY KEY TO ENTER // TAP TO ENTER</div>
+  </div>
+</div>
+
+<!-- SCANLINE + NOISE OVERLAY -->
+<div class="scanlines" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<!-- AMBIENT SOUNDS TOGGLE -->
+<button class="ambient-btn" id="ambientBtn" aria-label="Toggle ambient sound">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" stroke-width="1.5" stroke-linecap="round"/></svg>
+</button>
+
+<!-- CURSOR -->
+<div id="cursor">
+  <svg class="cur-outer" viewBox="0 0 60 60">
+    <polygon class="cur-hex" points="30,2 56,16 56,44 30,58 4,44 4,16" fill="none" stroke="var(--c1)" stroke-width="1"/>
+    <circle class="cur-dot" cx="30" cy="30" r="3" fill="var(--c1)"/>
+    <line class="cur-cross-h" x1="18" y1="30" x2="24" y2="30" stroke="var(--c1)" stroke-width="1.5"/>
+    <line class="cur-cross-h2" x1="36" y1="30" x2="42" y2="30" stroke="var(--c1)" stroke-width="1.5"/>
+    <line class="cur-cross-v" x1="30" y1="18" x2="30" y2="24" stroke="var(--c1)" stroke-width="1.5"/>
+    <line class="cur-cross-v2" x1="30" y1="36" x2="30" y2="42" stroke="var(--c1)" stroke-width="1.5"/>
+  </svg>
+  <div class="cur-label" id="curLabel"></div>
+</div>
+
+<!-- MAIN HUD FRAME -->
+<div id="hud" class="hud-hidden">
+
+  <!-- CORNER DECORATORS -->
+  <div class="corner c-tl"><svg viewBox="0 0 80 80"><path d="M2 40 L2 2 L40 2" fill="none" stroke="var(--c1)" stroke-width="1.5"/><path d="M2 20 L12 2" fill="none" stroke="var(--c1)" stroke-width="1" opacity="0.4"/></svg></div>
+  <div class="corner c-tr"><svg viewBox="0 0 80 80"><path d="M78 40 L78 2 L40 2" fill="none" stroke="var(--c1)" stroke-width="1.5"/><path d="M78 20 L68 2" fill="none" stroke="var(--c1)" stroke-width="1" opacity="0.4"/></svg></div>
+  <div class="corner c-bl"><svg viewBox="0 0 80 80"><path d="M2 40 L2 78 L40 78" fill="none" stroke="var(--c2)" stroke-width="1.5"/></svg></div>
+  <div class="corner c-br"><svg viewBox="0 0 80 80"><path d="M78 40 L78 78 L40 78" fill="none" stroke="var(--c2)" stroke-width="1.5"/></svg></div>
+
+  <!-- TOP STATUS BAR -->
+  <header class="hud-topbar">
+    <div class="tb-left">
+      <span class="tb-logo">
+        <svg viewBox="0 0 32 32" class="tb-hex-logo"><polygon points="16,1 30,8.5 30,23.5 16,31 2,23.5 2,8.5" fill="none" stroke="var(--c1)" stroke-width="1.5"/><text y="21" x="16" text-anchor="middle" font-size="13" font-family="Orbitron" fill="var(--c1)" font-weight="700">S</text></svg>
+        <span class="tb-name">SITHONG</span>
+      </span>
+      <span class="tb-divider">|</span>
+      <span class="tb-tag">DIGITAL ARCHITECT</span>
+    </div>
+    <nav class="tb-nav" id="tbNav">
+      <a href="#hero" class="tb-link active" data-sec="hero">HOME</a>
+      <a href="#about" class="tb-link" data-sec="about">PROFILE</a>
+      <a href="#skills" class="tb-link" data-sec="skills">SYSTEMS</a>
+      <a href="#work" class="tb-link" data-sec="work">MISSIONS</a>
+      <a href="#services" class="tb-link" data-sec="services">SERVICES</a>
+      <a href="#contact" class="tb-link" data-sec="contact">UPLINK</a>
+    </nav>
+    <div class="tb-right">
+      <span class="tb-status"><span class="status-dot"></span>ONLINE</span>
+      <span class="tb-clock" id="tbClock">00:00:00</span>
+      <span class="tb-coord">VTE // 17°58'N 102°36'E</span>
+      <button class="tb-menu" id="tbMenu" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- SCROLL PROGRESS -->
+  <div class="hud-scrollbar"><div class="hud-scrollfill" id="scrollFill"></div></div>
+
+  <!-- SIDE PANELS -->
+  <aside class="side-panel side-l">
+    <div class="sp-vert-text">NEURAL // INTERFACE // v7.4</div>
+    <div class="sp-indicators">
+      <div class="sp-ind active"></div>
+      <div class="sp-ind"></div>
+      <div class="sp-ind"></div>
+      <div class="sp-ind"></div>
+      <div class="sp-ind"></div>
+      <div class="sp-ind"></div>
+    </div>
+    <div class="sp-data">
+      <div class="sp-datum"><span class="sp-key">PWR</span><span class="sp-val" id="spPwr">94%</span></div>
+      <div class="sp-datum"><span class="sp-key">SIG</span><span class="sp-val" id="spSig">██▓▒</span></div>
+      <div class="sp-datum"><span class="sp-key">LAT</span><span class="sp-val">17.97</span></div>
+    </div>
+  </aside>
+  <aside class="side-panel side-r">
+    <div class="sp-vert-text">VIENTIANE // LAOS // 2026</div>
+    <div class="sp-data">
+      <div class="sp-datum"><span class="sp-key">MEM</span><span class="sp-val" id="spMem">██░░</span></div>
+      <div class="sp-datum"><span class="sp-key">FPS</span><span class="sp-val" id="spFps">60</span></div>
+      <div class="sp-datum"><span class="sp-key">NET</span><span class="sp-val">↑↓OK</span></div>
+    </div>
+  </aside>
+
+  <!-- MOBILE SLIDE MENU -->
+  <div class="mob-overlay" id="mobOverlay"></div>
+  <nav class="mob-nav" id="mobNav">
+    <div class="mob-header">
+      <span>SYS://NAVIGATE</span>
+      <button class="mob-close" id="mobClose">✕</button>
+    </div>
+    <a href="#hero"     class="mob-item" data-sec="hero">01 // HOME</a>
+    <a href="#about"    class="mob-item" data-sec="about">02 // PROFILE</a>
+    <a href="#skills"   class="mob-item" data-sec="skills">03 // SYSTEMS</a>
+    <a href="#work"     class="mob-item" data-sec="work">04 // MISSIONS</a>
+    <a href="#services" class="mob-item" data-sec="services">05 // SERVICES</a>
+    <a href="#contact"  class="mob-item" data-sec="contact">06 // UPLINK</a>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main id="mainContent">
+
+    <!-- ═══════ HERO ═══════ -->
+    <section id="hero" class="hud-section sec-hero">
+      <canvas id="heroCanvas" class="hero-canvas"></canvas>
+
+      <!-- Hex grid BG -->
+      <div class="hex-grid-bg" aria-hidden="true"></div>
+
+      <!-- Radar sweep -->
+      <div class="radar-wrap" aria-hidden="true">
+        <div class="radar-ring rr1"></div>
+        <div class="radar-ring rr2"></div>
+        <div class="radar-ring rr3"></div>
+        <div class="radar-sweep"></div>
+        <div class="radar-blip rb1"></div>
+        <div class="radar-blip rb2"></div>
+        <div class="radar-blip rb3"></div>
+      </div>
+
+      <div class="hero-hud">
+        <!-- Left identity -->
+        <div class="hero-id">
+          <div class="hi-tag">
+            <span class="hi-bracket">[</span>
+            <span class="hi-status-dot"></span>
+            <span>ENTITY.IDENTIFIED // CLEARANCE: ALPHA</span>
+            <span class="hi-bracket">]</span>
+          </div>
+          <h1 class="hero-name">
+            <span class="hn-line" data-i="0">SITHONG</span><span class="hn-line hn-accent" data-i="1">BOULEE</span>
+          </h1>
+          <div class="hero-title-tag">DIGITAL // ARCHITECT // CREATOR</div>
+          <p class="hero-bio">
+            Full-stack developer &amp; creative designer engineering<br/>
+            impossible interfaces from <span class="bio-acc">Vientiane, Laos</span>.<br/>
+            <span class="bio-typed" id="bioTyped"></span><span class="bio-cur">_</span>
+          </p>
+          <div class="hero-metrics">
+            <div class="hm-item">
+              <div class="hm-num"><span class="cu" data-n="0">0</span>+</div>
+              <div class="hm-label">MISSIONS COMPLETE</div>
+            </div>
+            <div class="hm-sep">//</div>
+            <div class="hm-item">
+              <div class="hm-num"><span class="cu" data-n="0">0</span>+</div>
+              <div class="hm-label">YEARS ACTIVE</div>
+            </div>
+            <div class="hm-sep">//</div>
+            <div class="hm-item">
+              <div class="hm-num"><span class="cu" data-n="0">0</span>%</div>
+              <div class="hm-label">SUCCESS RATE</div>
+            </div>
+          </div>
+          <div class="hero-actions">
+            <a href="#work" class="hud-btn btn-primary">
+              <span class="hb-bracket">▶</span> VIEW MISSIONS
+            </a>
+            <a href="#contact" class="hud-btn btn-ghost">
+              <span class="hb-bracket">//</span> INITIATE UPLINK
+            </a>
+          </div>
+        </div>
+
+        <!-- Right avatar HUD -->
+        <div class="hero-avatar-hud">
+          <div class="hah-frame">
+            <svg class="hah-hex-border" viewBox="0 0 300 340">
+              <polygon class="hah-outer" points="150,8 290,83 290,257 150,332 10,257 10,83" fill="none" stroke="var(--c1)" stroke-width="1.5" stroke-dasharray="6 3"/>
+              <polygon class="hah-inner" points="150,30 268,95 268,245 150,310 32,245 32,95" fill="none" stroke="var(--c1)" stroke-width="0.5" opacity="0.3"/>
+              <!-- Rotating decoration -->
+              <circle class="hah-orbit" cx="150" cy="170" r="120" fill="none" stroke="var(--c2)" stroke-width="0.5" stroke-dasharray="4 8"/>
+              <circle class="hah-orbit2" cx="150" cy="170" r="100" fill="none" stroke="var(--c1)" stroke-width="0.3" stroke-dasharray="2 6" opacity="0.4"/>
+            </svg>
+            <div class="hah-inner-ring">
+              <div class="hah-avatar">
+                <image src="https://i.imgur.com/FZsFyPa.png" alt="Sithong's Avatar" class="hah-avatar-img" />
+                <!-- Scan line across avatar -->
+                <div class="hah-scan"></div>
+              </div>
+            </div>
+            <!-- HUD data overlays on the avatar -->
+            <div class="hah-tag hah-tag-tl">ID:VTE-001</div>
+            <div class="hah-tag hah-tag-tr">THREAT:NONE</div>
+            <div class="hah-tag hah-tag-bl">CLASS:ARCH</div>
+            <div class="hah-tag hah-tag-br">AVAIL:YES</div>
+          </div>
+          <!-- Floating tech chips -->
+          <div class="tech-chip tc1">React</div>
+          <div class="tech-chip tc2">Node.js</div>
+          <div class="tech-chip tc3">Three.js</div>
+          <div class="tech-chip tc4">Figma</div>
+          <div class="tech-chip tc5">TypeScript</div>
+        </div>
+      </div>
+
+      <!-- Bottom strip -->
+      <div class="hero-bottom-strip">
+        <div class="hbs-scroll">
+          <div class="hbs-arrow"></div>
+          <span>SCROLL TO EXPLORE</span>
+        </div>
+        <div class="hbs-ticker">
+          <span class="hbs-tick-inner" id="heroBanner">
+            &nbsp;⬡ FULL-STACK DEVELOPMENT &nbsp;// &nbsp;UI/UX DESIGN &nbsp;// &nbsp;3D & MOTION &nbsp;// &nbsp;MOBILE APPS &nbsp;// &nbsp;BRAND IDENTITY &nbsp;// &nbsp;CONSULTING &nbsp;// &nbsp;OPEN FOR WORK 2026 &nbsp;⬡&nbsp;⬡ FULL-STACK DEVELOPMENT &nbsp;// &nbsp;UI/UX DESIGN &nbsp;// &nbsp;3D & MOTION &nbsp;// &nbsp;MOBILE APPS &nbsp;// &nbsp;BRAND IDENTITY &nbsp;// &nbsp;CONSULTING &nbsp;// &nbsp;OPEN FOR WORK 2026 &nbsp;⬡
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════ ABOUT ═══════ -->
+    <section id="about" class="hud-section sec-about">
+      <div class="hud-container">
+        <div class="sec-hd reveal">
+          <span class="sec-code">SYS://02</span>
+          <h2 class="sec-title">SUBJECT <span class="st-acc">PROFILE</span></h2>
+          <div class="sec-hline"></div>
+        </div>
+
+        <div class="about-grid">
+          <!-- Left: ID card -->
+          <div class="about-idcard reveal">
+            <div class="idc-header">
+              <span class="idc-type">NEURAL ID CARD</span>
+              <span class="idc-code">VTE-001-ARCH</span>
+            </div>
+            <div class="idc-body">
+              <div class="idc-avatar-wrap">
+                <img src="https://i.imgur.com/VVmJZLz.jpeg" alt="Sithong's Avatar" class="idc-avatar" />
+                <div class="idc-scan-h"></div>
+              </div>
+              <div class="idc-info">
+                <div class="idc-row"><span class="idc-key">DESIGNATION</span><span class="idc-val">SITHONG</span></div>
+                <div class="idc-row"><span class="idc-key">CLASS</span><span class="idc-val">DIGITAL ARCHITECT</span></div>
+                <div class="idc-row"><span class="idc-key">ORIGIN</span><span class="idc-val">VIENTIANE, LAOS</span></div>
+                <div class="idc-row"><span class="idc-key">UPTIME</span><span class="idc-val">3+ YEARS</span></div>
+                <div class="idc-row"><span class="idc-key">STATUS</span><span class="idc-val idc-green"><span class="idc-dot"></span>AVAILABLE</span></div>
+              </div>
+            </div>
+            <!-- Skill bars styled as system vitals -->
+            <div class="idc-vitals">
+              <div class="vital">
+                <span class="v-name">FRONTEND</span>
+                <div class="v-bar"><div class="v-fill" data-w="92" style="--vc:var(--c1)"></div></div>
+                <span class="v-pct">92%</span>
+              </div>
+              <div class="vital">
+                <span class="v-name">UI/UX</span>
+                <div class="v-bar"><div class="v-fill" data-w="89" style="--vc:var(--c2)"></div></div>
+                <span class="v-pct">89%</span>
+              </div>
+              <div class="vital">
+                <span class="v-name">BACKEND</span>
+                <div class="v-bar"><div class="v-fill" data-w="80" style="--vc:var(--c3)"></div></div>
+                <span class="v-pct">80%</span>
+              </div>
+              <div class="vital">
+                <span class="v-name">3D/MOTION</span>
+                <div class="v-bar"><div class="v-fill" data-w="75" style="--vc:var(--c4)"></div></div>
+                <span class="v-pct">75%</span>
+              </div>
+            </div>
+            <div class="idc-footer">
+              <div class="idc-qr">
+                <svg viewBox="0 0 60 60"><rect x="2" y="2" width="24" height="24" fill="none" stroke="var(--c1)" stroke-width="2"/><rect x="8" y="8" width="12" height="12" fill="var(--c1)"/><rect x="34" y="2" width="24" height="24" fill="none" stroke="var(--c1)" stroke-width="2"/><rect x="40" y="8" width="12" height="12" fill="var(--c1)"/><rect x="2" y="34" width="24" height="24" fill="none" stroke="var(--c1)" stroke-width="2"/><rect x="8" y="40" width="12" height="12" fill="var(--c1)"/><rect x="34" y="34" width="10" height="10" fill="var(--c1)" opacity="0.4"/><rect x="46" y="34" width="10" height="10" fill="var(--c1)"/><rect x="34" y="46" width="10" height="10" fill="var(--c1)"/><rect x="46" y="46" width="10" height="10" fill="var(--c1)" opacity="0.4"/></svg>
+              </div>
+              <span class="idc-serial">SERIAL// ST-2026-VTE-ARCH-001</span>
+            </div>
+          </div>
+
+          <!-- Right: Bio text panels -->
+          <div class="about-bio">
+            <div class="bio-panel reveal">
+              <div class="bp-label">// PRIMARY DIRECTIVE</div>
+              <p>I'm <strong>Sithong</strong> — a full-stack developer &amp; UI/UX designer engineering immersive digital experiences from Vientiane, Laos. I operate at the intersection of technology and art, building products that defy expectations.</p>
+            </div>
+            <div class="bio-panel reveal" data-delay="0.1">
+              <div class="bp-label">// MISSION HISTORY</div>
+              <p>3+ years shipping across fintech, e-commerce, healthcare, and SaaS. 30+ missions completed for startups, agencies, and enterprises worldwide — always pushing the boundary of what's possible.</p>
+            </div>
+            <div class="about-chips reveal" data-delay="0.2">
+              <div class="a-chip"><span>⚡</span> PERFORMANCE OBSESSED</div>
+              <div class="a-chip"><span>⬡</span> DESIGN DRIVEN</div>
+              <div class="a-chip"><span>▶</span> STARTUP MINDED</div>
+            </div>
+            <!-- Mini stats grid -->
+            <div class="about-stats-grid reveal" data-delay="0.3">
+              <div class="asg-item">
+                <div class="asg-num">30+</div>
+                <div class="asg-label">PROJECTS</div>
+              </div>
+              <div class="asg-item">
+                <div class="asg-num">10+</div>
+                <div class="asg-label">INDUSTRIES</div>
+              </div>
+              <div class="asg-item">
+                <div class="asg-num">5.0</div>
+                <div class="asg-label">AVG RATING</div>
+              </div>
+              <div class="asg-item">
+                <div class="asg-num">12</div>
+                <div class="asg-label">AWARDS</div>
+              </div>
+            </div>
+            <a href="#contact" class="hud-btn btn-primary reveal" data-delay="0.4">
+              <span>▶</span> INITIATE COLLABORATION
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════ SKILLS ═══════ -->
+    <section id="skills" class="hud-section sec-skills">
+      <div class="hud-container">
+        <div class="sec-hd reveal">
+          <span class="sec-code">SYS://03</span>
+          <h2 class="sec-title">SYSTEM <span class="st-acc">MODULES</span></h2>
+          <div class="sec-hline"></div>
+        </div>
+
+        <div class="skill-tabs reveal">
+          <button class="sk-tab active" data-tab="frontend">FRONTEND</button>
+          <button class="sk-tab" data-tab="backend">BACKEND</button>
+          <button class="sk-tab" data-tab="design">DESIGN</button>
+          <button class="sk-tab" data-tab="tools">TOOLS</button>
+        </div>
+
+        <div class="skill-panels">
+          <!-- FRONTEND -->
+          <div class="skill-panel active" id="sk-frontend">
+            <div class="module-grid">
+              <div class="module-card reveal" data-delay="0.0"><div class="mc-icon" style="--mc:61,218,251"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="3.5" fill="#61DAFB"/><ellipse cx="20" cy="20" rx="18" ry="7" stroke="#61DAFB" stroke-width="1.8" fill="none"/><ellipse cx="20" cy="20" rx="18" ry="7" stroke="#61DAFB" stroke-width="1.8" fill="none" transform="rotate(60 20 20)"/><ellipse cx="20" cy="20" rx="18" ry="7" stroke="#61DAFB" stroke-width="1.8" fill="none" transform="rotate(120 20 20)"/></svg></div><div class="mc-name">React</div><div class="mc-bar"><div class="mc-fill" data-w="95"></div></div><div class="mc-lvl">95%</div></div>
+              <div class="module-card reveal" data-delay="0.05"><div class="mc-icon" style="--mc:255,255,255"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" fill="#000"/><path d="M11.5 27V13h12.8l-1.9 2.2H14v3.9h7.5l-1.9 2.2H14v3.5h9.5l1.9 2.2H11.5z" fill="white"/><path d="M27 13l-5.5 7.5L27 27h-2.5l-4.1-5.4 4.1-5.6 2.5-3z" fill="white"/></svg></div><div class="mc-name">Next.js</div><div class="mc-bar"><div class="mc-fill" data-w="90"></div></div><div class="mc-lvl">90%</div></div>
+              <div class="module-card reveal" data-delay="0.1"><div class="mc-icon" style="--mc:49,120,198"><svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="4" fill="#3178C6"/><path d="M22.5 21.5v-2.3h-11v2.3h4v11.5h3v-11.5h4z" fill="white"/><path d="M24.5 32.5v-3c.8.6 2 1 3.2 1 1.6 0 2.4-.5 2.4-1.4 0-.4-.1-.7-.4-1-.3-.2-.9-.5-1.8-.8-2.5-.8-3.8-2-3.8-3.8 0-1.2.5-2.1 1.4-2.8.9-.7 2.1-1 3.6-1 1.4 0 2.6.2 3.5.6v2.9c-.8-.5-1.8-.8-3-.8-1.5 0-2.2.5-2.2 1.4 0 .4.1.7.4.9.3.2.9.5 1.9.8 1.4.5 2.4 1 3 1.6.6.6.9 1.4.9 2.4 0 1.2-.5 2.2-1.4 2.9-.9.7-2.2 1-3.8 1-1.4 0-2.6-.3-3.9-.9z" fill="white"/></svg></div><div class="mc-name">TypeScript</div><div class="mc-bar"><div class="mc-fill" data-w="88"></div></div><div class="mc-lvl">88%</div></div>
+              <div class="module-card reveal" data-delay="0.15"><div class="mc-icon" style="--mc:56,189,248"><svg viewBox="0 0 40 40" fill="none"><path d="M20 8c-4.8 0-7.8 2.4-9 7.2 1.8-2.4 3.9-3.3 6.3-2.7 1.37.34 2.35 1.33 3.43 2.42C22.5 16.7 24.35 18.6 28 18.6c4.8 0 7.8-2.4 9-7.2-1.8 2.4-3.9 3.3-6.3 2.7-1.37-.34-2.35-1.33-3.43-2.42C25.5 9.9 23.65 8 20 8zm-9 10.8c-4.8 0-7.8 2.4-9 7.2 1.8-2.4 3.9-3.3 6.3-2.7 1.37.34 2.35 1.33 3.43 2.42C13.5 27.5 15.35 29.4 19 29.4c4.8 0 7.8-2.4 9-7.2-1.8 2.4-3.9 3.3-6.3 2.7-1.37-.34-2.35-1.33-3.43-2.42C16.5 20.7 14.65 18.8 11 18.8z" fill="#38BDF8"/></svg></div><div class="mc-name">Tailwind</div><div class="mc-bar"><div class="mc-fill" data-w="95"></div></div><div class="mc-lvl">95%</div></div>
+              <div class="module-card reveal" data-delay="0.2"><div class="mc-icon" style="--mc:10,228,72"><svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="8" fill="#0AE448" fill-opacity="0.15"/><path d="M8 20c0-6.6 5.4-12 12-12s12 5.4 12 12-5.4 12-12 12S8 26.6 8 20z" stroke="#0AE448" stroke-width="2" fill="none"/><path d="M20 14v6l4 4" stroke="#0AE448" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="mc-name">GSAP</div><div class="mc-bar"><div class="mc-fill" data-w="82"></div></div><div class="mc-lvl">82%</div></div>
+              <div class="module-card reveal" data-delay="0.25"><div class="mc-icon" style="--mc:255,255,255"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="16" fill="#000"/><circle cx="20" cy="20" r="16" stroke="white" stroke-width="1"/><circle cx="14" cy="14" r="5" fill="#FF7262"/><circle cx="26" cy="14" r="5" fill="#1ABCFE"/><circle cx="14" cy="26" r="5" fill="#0ACF83"/><circle cx="26" cy="26" r="5" fill="#A259FF"/></svg></div><div class="mc-name">Figma</div><div class="mc-bar"><div class="mc-fill" data-w="93"></div></div><div class="mc-lvl">93%</div></div>
+              <div class="module-card reveal" data-delay="0.3"><div class="mc-icon" style="--mc:99,102,241"><svg viewBox="0 0 40 40" fill="none"><defs><linearGradient id="tg" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse"><stop stop-color="#818CF8"/><stop offset="1" stop-color="#6366F1"/></linearGradient></defs><path d="M20 4L36 20 20 36 4 20 20 4z" fill="url(#tg)" fill-opacity="0.2" stroke="url(#tg)" stroke-width="1.5"/><text x="20" y="24" text-anchor="middle" font-size="12" font-family="monospace" fill="#818CF8" font-weight="700">CSS</text></svg></div><div class="mc-name">CSS/SCSS</div><div class="mc-bar"><div class="mc-fill" data-w="96"></div></div><div class="mc-lvl">96%</div></div>
+              <div class="module-card reveal" data-delay="0.35"><div class="mc-icon" style="--mc:247,147,30"><svg viewBox="0 0 40 40" fill="none"><path d="M5 35L12 5h16L35 35l-15-5-15 5z" fill="#F7931E" fill-opacity="0.2" stroke="#F7931E" stroke-width="1.5"/><text x="20" y="26" text-anchor="middle" font-size="10" font-family="monospace" fill="#F7931E" font-weight="700">JS</text></svg></div><div class="mc-name">JavaScript</div><div class="mc-bar"><div class="mc-fill" data-w="94"></div></div><div class="mc-lvl">94%</div></div>
+            </div>
+          </div>
+
+          <!-- BACKEND -->
+          <div class="skill-panel" id="sk-backend">
+            <div class="module-grid">
+              <div class="module-card reveal"><div class="mc-icon" style="--mc:104,160,99"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="16" fill="#104328" fill-opacity="0.5"/><path d="M14 28V20l6-10 6 10v8" stroke="#68A063" stroke-width="2" stroke-linejoin="round"/><path d="M10 28h20" stroke="#68A063" stroke-width="2" stroke-linecap="round"/></svg></div><div class="mc-name">Node.js</div><div class="mc-bar"><div class="mc-fill" data-w="85"></div></div><div class="mc-lvl">85%</div></div>
+              <div class="module-card reveal" data-delay="0.05"><div class="mc-icon" style="--mc:0,117,204"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="8" width="32" height="24" rx="4" fill="#0075cc" fill-opacity="0.2" stroke="#0075cc" stroke-width="1.5"/><path d="M4 16h32M12 8v24M20 8v24" stroke="#0075cc" stroke-width="1" opacity="0.5"/><text x="28" y="28" text-anchor="middle" font-size="8" font-family="monospace" fill="#0075cc" font-weight="700">SQL</text></svg></div><div class="mc-name">PostgreSQL</div><div class="mc-bar"><div class="mc-fill" data-w="80"></div></div><div class="mc-lvl">80%</div></div>
+              <div class="module-card reveal" data-delay="0.1"><div class="mc-icon" style="--mc:0,237,100"><svg viewBox="0 0 40 40" fill="none"><path d="M20 8c-6 0-10 3-10 7s4 6 10 7c6 1 10 3 10 7s-4 7-10 7-10-3-10-7" stroke="#00ED64" stroke-width="2.5" stroke-linecap="round" fill="none"/><path d="M20 5v5M20 30v5" stroke="#00ED64" stroke-width="2" stroke-linecap="round"/></svg></div><div class="mc-name">MongoDB</div><div class="mc-bar"><div class="mc-fill" data-w="82"></div></div><div class="mc-lvl">82%</div></div>
+              <div class="module-card reveal" data-delay="0.15"><div class="mc-icon" style="--mc:220,53,46"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="14" fill="#DC3545" fill-opacity="0.15" stroke="#DC3545" stroke-width="1.5"/><path d="M12 20h16M20 12v16M14.5 14.5l11 11M25.5 14.5l-11 11" stroke="#DC3545" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="mc-name">Redis</div><div class="mc-bar"><div class="mc-fill" data-w="75"></div></div><div class="mc-lvl">75%</div></div>
+              <div class="module-card reveal" data-delay="0.2"><div class="mc-icon" style="--mc:255,153,0"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="12" width="32" height="20" rx="3" fill="#FF9900" fill-opacity="0.15" stroke="#FF9900" stroke-width="1.5"/><path d="M10 8h20M14 4h12" stroke="#FF9900" stroke-width="2" stroke-linecap="round"/><circle cx="20" cy="22" r="4" stroke="#FF9900" stroke-width="1.5"/></svg></div><div class="mc-name">AWS</div><div class="mc-bar"><div class="mc-fill" data-w="70"></div></div><div class="mc-lvl">70%</div></div>
+              <div class="module-card reveal" data-delay="0.25"><div class="mc-icon" style="--mc:246,82,61"><svg viewBox="0 0 40 40" fill="none"><path d="M8 30V16l12-8 12 8v14l-12 8-12-8z" fill="#F6523D" fill-opacity="0.15" stroke="#F6523D" stroke-width="1.5"/><path d="M8 16l12 8 12-8M20 24v14" stroke="#F6523D" stroke-width="1.5"/></svg></div><div class="mc-name">Docker</div><div class="mc-bar"><div class="mc-fill" data-w="72"></div></div><div class="mc-lvl">72%</div></div>
+              <div class="module-card reveal" data-delay="0.3"><div class="mc-icon" style="--mc:229,64,59"><svg viewBox="0 0 40 40" fill="none"><path d="M20 6L6 14v12l14 8 14-8V14L20 6z" fill="#E5403B" fill-opacity="0.15" stroke="#E5403B" stroke-width="1.5" stroke-linejoin="round"/><text x="20" y="24" text-anchor="middle" font-size="8" font-family="monospace" fill="#E5403B" font-weight="700">GQL</text></svg></div><div class="mc-name">GraphQL</div><div class="mc-bar"><div class="mc-fill" data-w="78"></div></div><div class="mc-lvl">78%</div></div>
+              <div class="module-card reveal" data-delay="0.35"><div class="mc-icon" style="--mc:0,122,204"><svg viewBox="0 0 40 40" fill="none"><rect x="6" y="6" width="28" height="28" rx="4" fill="#0077CC" fill-opacity="0.15" stroke="#0077CC" stroke-width="1.5"/><text x="20" y="26" text-anchor="middle" font-size="11" font-family="monospace" fill="#0077CC" font-weight="700">API</text></svg></div><div class="mc-name">REST APIs</div><div class="mc-bar"><div class="mc-fill" data-w="90"></div></div><div class="mc-lvl">90%</div></div>
+            </div>
+          </div>
+
+          <!-- DESIGN -->
+          <div class="skill-panel" id="sk-design">
+            <div class="module-grid">
+              <div class="module-card reveal"><div class="mc-icon" style="--mc:255,114,114"><svg viewBox="0 0 40 40" fill="none"><circle cx="14" cy="14" r="5" fill="#FF7262"/><circle cx="26" cy="14" r="5" fill="#1ABCFE"/><circle cx="14" cy="26" r="5" fill="#0ACF83"/><circle cx="26" cy="26" r="5" fill="#A259FF"/></svg></div><div class="mc-name">Figma</div><div class="mc-bar"><div class="mc-fill" data-w="95"></div></div><div class="mc-lvl">95%</div></div>
+              <div class="module-card reveal" data-delay="0.05"><div class="mc-icon" style="--mc:255,154,0"><svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="6" fill="#FF0000" fill-opacity="0.15"/><text x="20" y="27" text-anchor="middle" font-family="serif" font-size="16" font-weight="900" fill="#FF9A00">Ai</text></svg></div><div class="mc-name">Illustrator</div><div class="mc-bar"><div class="mc-fill" data-w="80"></div></div><div class="mc-lvl">80%</div></div>
+              <div class="module-card reveal" data-delay="0.1"><div class="mc-icon" style="--mc:49,168,255"><svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="6" fill="#001D34" fill-opacity="0.5"/><text x="20" y="27" text-anchor="middle" font-family="serif" font-size="16" font-weight="900" fill="#31A8FF">Ps</text></svg></div><div class="mc-name">Photoshop</div><div class="mc-bar"><div class="mc-fill" data-w="75"></div></div><div class="mc-lvl">75%</div></div>
+              <div class="module-card reveal" data-delay="0.15"><div class="mc-icon" style="--mc:232,125,13"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="22" r="10" fill="none" stroke="#E87D0D" stroke-width="2"/><circle cx="20" cy="22" r="5" fill="#E87D0D"/><path d="M20 22L10 10" stroke="#265787" stroke-width="2.5" stroke-linecap="round"/></svg></div><div class="mc-name">Blender</div><div class="mc-bar"><div class="mc-fill" data-w="65"></div></div><div class="mc-lvl">65%</div></div>
+              <div class="module-card reveal" data-delay="0.2"><div class="mc-icon" style="--mc:153,153,255"><svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="6" fill="#00005B" fill-opacity="0.5"/><text x="20" y="27" text-anchor="middle" font-family="serif" font-size="14" font-weight="900" fill="#9999FF">Ae</text></svg></div><div class="mc-name">After Effects</div><div class="mc-bar"><div class="mc-fill" data-w="70"></div></div><div class="mc-lvl">70%</div></div>
+              <div class="module-card reveal" data-delay="0.25"><div class="mc-icon" style="--mc:67,83,255"><svg viewBox="0 0 40 40" fill="none"><path d="M5 14c5 0 9 3 10 8l2-8h4l-4 12h-4l-2-7c-1 4-4 7-8 7l2-12z" fill="#4353FF"/></svg></div><div class="mc-name">Webflow</div><div class="mc-bar"><div class="mc-fill" data-w="85"></div></div><div class="mc-lvl">85%</div></div>
+            </div>
+          </div>
+
+          <!-- TOOLS -->
+          <div class="skill-panel" id="sk-tools">
+            <div class="module-grid">
+              <div class="module-card reveal"><div class="mc-icon" style="--mc:255,255,255"><svg viewBox="0 0 40 40" fill="currentColor"><path d="M20 4C11.16 4 4 11.16 4 20c0 7.08 4.58 13.08 10.94 15.2.8.14 1.1-.34 1.1-.76v-2.66c-4.45.96-5.38-2.14-5.38-2.14-.72-1.84-1.76-2.32-1.76-2.32-1.44-.98.1-.96.1-.96 1.6.12 2.44 1.64 2.44 1.64 1.42 2.44 3.72 1.74 4.62 1.32.14-1.04.56-1.74 1.02-2.14-3.56-.4-7.3-1.78-7.3-7.9 0-1.74.62-3.16 1.64-4.28-.16-.4-.72-2.02.16-4.22 0 0 1.34-.42 4.38 1.64A15.24 15.24 0 0120 12.4c1.36 0 2.72.18 3.98.52 3.04-2.06 4.38-1.64 4.38-1.64.88 2.2.32 3.82.16 4.22 1.02 1.12 1.64 2.54 1.64 4.28 0 6.14-3.74 7.5-7.32 7.88.58.5 1.1 1.48 1.1 2.98v4.42c0 .42.28.92 1.12.76C31.44 33.06 36 27.06 36 20 36 11.16 28.84 4 20 4z"/></svg></div><div class="mc-name">GitHub</div><div class="mc-bar"><div class="mc-fill" data-w="95"></div></div><div class="mc-lvl">95%</div></div>
+              <div class="module-card reveal" data-delay="0.05"><div class="mc-icon" style="--mc:0,122,204"><svg viewBox="0 0 40 40" fill="none"><path d="M29 4l-16 16-7-5.5L4 16l3 4-3 4 2 1.5 7-5.5 16 16 7-3V7l-7-3z" fill="#007ACC"/></svg></div><div class="mc-name">VS Code</div><div class="mc-bar"><div class="mc-fill" data-w="98"></div></div><div class="mc-lvl">98%</div></div>
+              <div class="module-card reveal" data-delay="0.1"><div class="mc-icon" style="--mc:189,52,254"><svg viewBox="0 0 40 40" fill="none"><path d="M36 7L20.5 34.5 5 7h8.5l7 13 7-13H36z" fill="url(#vg2)" fill-opacity="0.9"/><defs><linearGradient id="vg2" x1="5" y1="7" x2="36" y2="34" gradientUnits="userSpaceOnUse"><stop stop-color="#BD34FE"/><stop offset="1" stop-color="#41D1FF"/></linearGradient></defs></svg></div><div class="mc-name">Vite</div><div class="mc-bar"><div class="mc-fill" data-w="90"></div></div><div class="mc-lvl">90%</div></div>
+              <div class="module-card reveal" data-delay="0.15"><div class="mc-icon" style="--mc:240,80,50"><svg viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="14" stroke="#F05032" stroke-width="2"/><path d="M14 20a6 6 0 016-6" stroke="#F05032" stroke-width="2" stroke-linecap="round"/><path d="M26 20a6 6 0 01-6 6" stroke="#F05032" stroke-width="2" stroke-linecap="round"/><circle cx="20" cy="14" r="2.5" fill="#F05032"/><circle cx="20" cy="26" r="2.5" fill="#F05032"/></svg></div><div class="mc-name">CI/CD</div><div class="mc-bar"><div class="mc-fill" data-w="75"></div></div><div class="mc-lvl">75%</div></div>
+              <div class="module-card reveal" data-delay="0.2"><div class="mc-icon" style="--mc:100,180,250"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="10" width="32" height="20" rx="3" fill="#64B4FA" fill-opacity="0.15" stroke="#64B4FA" stroke-width="1.5"/><path d="M10 20h20M20 14v12" stroke="#64B4FA" stroke-width="1.5" stroke-linecap="round"/></svg></div><div class="mc-name">Jira</div><div class="mc-bar"><div class="mc-fill" data-w="80"></div></div><div class="mc-lvl">80%</div></div>
+              <div class="module-card reveal" data-delay="0.25"><div class="mc-icon" style="--mc:0,200,120"><svg viewBox="0 0 40 40" fill="none"><circle cx="12" cy="20" r="6" fill="#00C878" fill-opacity="0.3" stroke="#00C878" stroke-width="1.5"/><circle cx="28" cy="20" r="6" fill="#00C878" fill-opacity="0.3" stroke="#00C878" stroke-width="1.5"/><path d="M18 20h4" stroke="#00C878" stroke-width="1.5"/></svg></div><div class="mc-name">Postman</div><div class="mc-bar"><div class="mc-fill" data-w="88"></div></div><div class="mc-lvl">88%</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════ WORK ═══════ -->
+    <section id="work" class="hud-section sec-work">
+      <div class="hud-container">
+        <div class="sec-hd reveal">
+          <span class="sec-code">SYS://04</span>
+          <h2 class="sec-title">MISSION <span class="st-acc">LOGS</span></h2>
+          <div class="sec-hline"></div>
+        </div>
+
+        <div class="work-filters reveal">
+          <button class="wf active" data-filter="all">ALL</button>
+          <button class="wf" data-filter="web">WEB APP</button>
+          <button class="wf" data-filter="design">DESIGN</button>
+          <button class="wf" data-filter="3d">3D/MOTION</button>
+          <button class="wf" data-filter="mobile">MOBILE</button>
+        </div>
+
+        <div class="mission-grid" id="missionGrid">
+          <article class="mission-card mc-large reveal" data-cat="web">
+            <div class="mc-bg mc-bg-1"></div>
+            <div class="mc-hud-overlay">
+              <div class="mco-tl">01</div>
+              <div class="mco-tr">WEB APP // 2024</div>
+              <div class="mco-bl">NEXUS E-COMMERCE</div>
+              <div class="mco-br">ACTIVE ▶</div>
+              <div class="mco-scanline"></div>
+            </div>
+            <div class="mc-content">
+              <div class="mc-meta"><span class="mc-cat-badge">WEB APP</span><span class="mc-yr">2024</span></div>
+              <h3 class="mc-title">Nexus E-Commerce Platform</h3>
+              <p class="mc-desc">Full-stack marketplace with real-time inventory, AI-powered recommendations, and Stripe payments.</p>
+              <div class="mc-stack"><span>Next.js</span><span>Node.js</span><span>Stripe</span><span>MongoDB</span></div>
+            </div>
+            <a href="https://www.wix.com/" target="_blank" class="mc-launch">LAUNCH ↗</a>
+          </article>
+
+          <article class="mission-card reveal" data-cat="design 3d">
+            <div class="mc-bg mc-bg-2"></div>
+            <div class="mc-hud-overlay"><div class="mco-tl">02</div><div class="mco-tr">3D // 2024</div><div class="mco-bl">AURORA 3D</div><div class="mco-br">COMPLETE ✓</div><div class="mco-scanline"></div></div>
+            <div class="mc-content"><div class="mc-meta"><span class="mc-cat-badge">3D / DESIGN</span><span class="mc-yr">2024</span></div><h3 class="mc-title">Aurora 3D Viewer</h3><p class="mc-desc">WebGL-powered 3D product configurator with real-time material switching and AR preview.</p><div class="mc-stack"><span>Three.js</span><span>WebGL</span><span>GSAP</span></div></div>
+            <a href="https://www.presentation-3d.com/" class="mc-launch">LAUNCH ↗</a>
+          </article>
+
+          <article class="mission-card reveal" data-cat="web">
+            <div class="mc-bg mc-bg-3"></div>
+            <div class="mc-hud-overlay"><div class="mco-tl">03</div><div class="mco-tr">WEB // 2023</div><div class="mco-bl">SYNAPSE AI</div><div class="mco-br">COMPLETE ✓</div><div class="mco-scanline"></div></div>
+            <div class="mc-content"><div class="mc-meta"><span class="mc-cat-badge">WEB APP</span><span class="mc-yr">2023</span></div><h3 class="mc-title">Synapse AI Dashboard</h3><p class="mc-desc">Real-time ML monitoring with D3.js visualizations and WebSocket analytics feeds.</p><div class="mc-stack"><span>React</span><span>D3.js</span><span>Python</span><span>Redis</span></div></div>
+            <a href="https://h1.nu/1kA4t" class="mc-launch">LAUNCH ↗</a>
+          </article>
+
+          <article class="mission-card reveal" data-cat="mobile">
+            <div class="mc-bg mc-bg-4"></div>
+            <div class="mc-hud-overlay"><div class="mco-tl">04</div><div class="mco-tr">MOBILE // 2023</div><div class="mco-bl">PULSE APP</div><div class="mco-br">COMPLETE ✓</div><div class="mco-scanline"></div></div>
+            <div class="mc-content"><div class="mc-meta"><span class="mc-cat-badge">MOBILE</span><span class="mc-yr">2023</span></div><h3 class="mc-title">Pulse Social App</h3><p class="mc-desc">Cross-platform social network with real-time messaging and algorithmic feed.</p><div class="mc-stack"><span>React Native</span><span>Socket.io</span><span>GraphQL</span></div></div>
+            <a href="https://www.pulselabs.ai/" class="mc-launch">LAUNCH ↗</a>
+          </article>
+
+          <article class="mission-card mc-wide reveal" data-cat="design">
+            <div class="mc-bg mc-bg-5"></div>
+            <div class="mc-hud-overlay"><div class="mco-tl">05</div><div class="mco-tr">DESIGN // 2023</div><div class="mco-bl">STELLAR DS</div><div class="mco-br">COMPLETE ✓</div><div class="mco-scanline"></div></div>
+            <div class="mc-content"><div class="mc-meta"><span class="mc-cat-badge">DESIGN SYSTEM</span><span class="mc-yr">2023</span></div><h3 class="mc-title">Stellar Design System</h3><p class="mc-desc">200+ components, design tokens, documentation and Figma library for enterprise products.</p><div class="mc-stack"><span>Figma</span><span>Storybook</span><span>React</span><span>CSS</span></div></div>
+            <a href="https://design-system.stellar.org/" class="mc-launch">LAUNCH ↗</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════ SERVICES ═══════ -->
+    <section id="services" class="hud-section sec-services">
+      <div class="hud-container">
+        <div class="sec-hd reveal">
+          <span class="sec-code">SYS://05</span>
+          <h2 class="sec-title">OPERATIONAL <span class="st-acc">CAPABILITIES</span></h2>
+          <div class="sec-hline"></div>
+        </div>
+
+        <div class="svc-grid">
+          <div class="svc-card reveal" data-delay="0.0">
+            <div class="svc-num">01</div>
+            <div class="svc-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="4" fill="var(--c1)" fill-opacity="0.07"/><path d="M8 16h32M8 24h32M8 32h32" stroke="var(--c1)" stroke-width="2" stroke-linecap="round"/><rect x="12" y="8" width="24" height="32" rx="3" stroke="var(--c1)" stroke-width="1.5"/></svg></div>
+            <h3>WEB DEVELOPMENT</h3>
+            <p>High-performance, scalable applications. From MVPs to enterprise systems.</p>
+            <ul><li>React / Next.js SPAs &amp; SSR</li><li>REST &amp; GraphQL APIs</li><li>Database design</li></ul>
+            <div class="svc-price">FROM $1,500</div>
+            <div class="svc-corner"></div>
+          </div>
+          <div class="svc-card reveal" data-delay="0.1">
+            <div class="svc-num">02</div>
+            <div class="svc-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="4" fill="var(--c2)" fill-opacity="0.07"/><path d="M24 6l-4 8H8l7 6-3 10 12-7 12 7-3-10 7-6H28z" stroke="var(--c2)" stroke-width="2" stroke-linejoin="round"/></svg></div>
+            <h3>UI/UX DESIGN</h3>
+            <p>User-centered interfaces blending aesthetics with functionality.</p>
+            <ul><li>User research &amp; wireframing</li><li>Interactive prototyping</li><li>Design systems &amp; tokens</li></ul>
+            <div class="svc-price">FROM $800</div>
+            <div class="svc-corner"></div>
+          </div>
+          <div class="svc-card reveal" data-delay="0.2">
+            <div class="svc-num">03</div>
+            <div class="svc-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="4" fill="var(--c3)" fill-opacity="0.07"/><path d="M24 8l14 8v16l-14 8-14-8V16z" stroke="var(--c3)" stroke-width="2" stroke-linejoin="round"/><circle cx="24" cy="24" r="6" stroke="var(--c3)" stroke-width="1.5"/></svg></div>
+            <h3>3D &amp; MOTION</h3>
+            <p>WebGL visualizations and scroll-driven cinematic animations.</p>
+            <ul><li>Three.js / WebGL scenes</li><li>GSAP scroll animations</li><li>Lottie &amp; SVG motion</li></ul>
+            <div class="svc-price">FROM $1,200</div>
+            <div class="svc-corner"></div>
+          </div>
+          <div class="svc-card reveal" data-delay="0.3">
+            <div class="svc-num">04</div>
+            <div class="svc-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="4" fill="var(--c4)" fill-opacity="0.07"/><rect x="14" y="4" width="20" height="36" rx="4" stroke="var(--c4)" stroke-width="2"/><path d="M18 8h12M21 36h6" stroke="var(--c4)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+            <h3>MOBILE APPS</h3>
+            <p>Cross-platform iOS &amp; Android apps with native performance.</p>
+            <ul><li>React Native</li><li>Expo framework</li><li>App Store deployment</li></ul>
+            <div class="svc-price">FROM $2,000</div>
+            <div class="svc-corner"></div>
+          </div>
+          <div class="svc-card reveal" data-delay="0.4">
+            <div class="svc-num">05</div>
+            <div class="svc-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="4" fill="var(--c1)" fill-opacity="0.07"/><path d="M12 24l8 8 16-16" stroke="var(--c1)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <h3>BRAND IDENTITY</h3>
+            <p>Complete visual identity systems that make brands unforgettable.</p>
+            <ul><li>Logo &amp; icon design</li><li>Brand guidelines</li><li>Marketing assets</li></ul>
+            <div class="svc-price">FROM $600</div>
+            <div class="svc-corner"></div>
+          </div>
+          <div class="svc-card reveal" data-delay="0.5">
+            <div class="svc-num">06</div>
+            <div class="svc-icon"><svg viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="4" fill="var(--c2)" fill-opacity="0.07"/><circle cx="24" cy="16" r="8" stroke="var(--c2)" stroke-width="2"/><path d="M12 40c0-6.6 5.4-12 12-12s12 5.4 12 12" stroke="var(--c2)" stroke-width="2" stroke-linecap="round"/></svg></div>
+            <h3>CONSULTING</h3>
+            <p>Strategic technical guidance to scale your digital products.</p>
+            <ul><li>Architecture review</li><li>Performance audits</li><li>Team mentoring</li></ul>
+            <div class="svc-price">FROM $150/HR</div>
+            <div class="svc-corner"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════ CONTACT ═══════ -->
+    <section id="contact" class="hud-section sec-contact">
+      <div class="hud-container">
+        <div class="sec-hd reveal">
+          <span class="sec-code">SYS://06</span>
+          <h2 class="sec-title">ESTABLISH <span class="st-acc">UPLINK</span></h2>
+          <div class="sec-hline"></div>
+        </div>
+
+        <div class="contact-grid">
+          <!-- Left info panel -->
+          <div class="contact-info">
+            <div class="ci-panel reveal">
+              <div class="ci-label">// TRANSMISSION STATUS</div>
+              <div class="ci-status"><span class="ci-sdot"></span> RECEIVING SIGNALS</div>
+            </div>
+            <div class="contact-details reveal" data-delay="0.1">
+              <div class="cd-item">
+                <div class="cd-key">EMAIL CHANNEL</div>
+                <a href="/cdn-cgi/l/email-protection#31425845595e5f56000003010107715449505c415d541f525e5c" class="cd-val"><span class="__cf_email__" data-cfemail="4e3d273a262120297f7f7c7e7e780e2b362f233e222b602d2123">[email&#160;protected]</span></a>
+              </div>
+              <div class="cd-item">
+                <div class="cd-key">LOCATION NODE</div>
+                <div class="cd-val">Vientiane, Laos</div>
+              </div>
+              <div class="cd-item">
+                <div class="cd-key">RESPONSE TIME</div>
+                <div class="cd-val">&lt; 24 HOURS</div>
+              </div>
+              <div class="cd-item">
+                <div class="cd-key">AVAILABILITY</div>
+                <div class="cd-val cd-green">OPEN FOR MISSIONS</div>
+              </div>
+            </div>
+            <div class="contact-socials reveal" data-delay="0.2">
+              <div class="cs-label">// SOCIAL UPLINKS</div>
+              <div class="cs-links">
+                <a href="https://github.com" target="_blank" class="cs-link">GH</a>
+                <a href="https://linkedin.com" target="_blank" class="cs-link">LI</a>
+                <a href="https://twitter.com" target="_blank" class="cs-link">TW</a>
+                <a href="https://dribbble.com" target="_blank" class="cs-link">DR</a>
+                <a href="https://instagram.com" target="_blank" class="cs-link">IG</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right form -->
+          <div class="contact-form-wrap reveal" data-delay="0.15">
+            <div class="cf-header">// INITIATE TRANSMISSION</div>
+            <form id="contactForm" class="contact-form" novalidate>
+              <div class="cf-row">
+                <div class="cf-group">
+                  <label>FIRST NAME <span class="req">*</span></label>
+                  <input type="text" name="fname" id="fname" placeholder="Enter first name..." autocomplete="given-name"/>
+                  <span class="cf-err" id="err-fname"></span>
+                </div>
+                <div class="cf-group">
+                  <label>LAST NAME <span class="req">*</span></label>
+                  <input type="text" name="lname" id="lname" placeholder="Enter last name..." autocomplete="family-name"/>
+                  <span class="cf-err" id="err-lname"></span>
+                </div>
+              </div>
+              <div class="cf-group">
+                <label>EMAIL ADDRESS <span class="req">*</span></label>
+                <input type="email" name="email" id="email" placeholder="your@email.com" autocomplete="email"/>
+                <span class="cf-err" id="err-email"></span>
+              </div>
+              <div class="cf-row">
+                <div class="cf-group">
+                  <label>SERVICE TYPE</label>
+                  <select name="service" id="service">
+                    <option value="">SELECT SERVICE...</option>
+                    <option value="web">Web Development</option>
+                    <option value="design">UI/UX Design</option>
+                    <option value="3d">3D &amp; Motion</option>
+                    <option value="mobile">Mobile App</option>
+                    <option value="brand">Brand Identity</option>
+                    <option value="consult">Consulting</option>
+                  </select>
+                </div>
+                <div class="cf-group">
+                  <label>BUDGET RANGE</label>
+                  <select name="budget" id="budget">
+                    <option value="">SELECT BUDGET...</option>
+                    <option value="under1k">Under $1,000</option>
+                    <option value="1k5k">$1,000 – $5,000</option>
+                    <option value="5k10k">$5,000 – $10,000</option>
+                    <option value="10k+">$10,000+</option>
+                  </select>
+                </div>
+              </div>
+              <div class="cf-group">
+                <label>MESSAGE <span class="req">*</span></label>
+                <textarea name="message" id="message" rows="5" placeholder="Describe your mission objectives..."></textarea>
+                <span class="cf-err" id="err-message"></span>
+                <span class="cf-charcount"><span id="charCount">0</span>/500</span>
+              </div>
+              <div class="cf-check-group">
+                <label class="cf-check">
+                  <input type="checkbox" name="terms" id="terms"/>
+                  <span class="cf-checkbox"></span>
+                  <span>I agree to the <a href="#">Privacy Policy</a></span>
+                </label>
+                <span class="cf-err" id="err-terms"></span>
+              </div>
+              <button type="submit" class="hud-btn btn-primary cf-submit">
+                <span class="cf-submit-text">▶ SEND TRANSMISSION</span>
+                <span class="cf-submit-loader"></span>
+              </button>
+              <div class="cf-success" id="formSuccess">
+                <div class="cfs-icon">✓</div>
+                <strong>TRANSMISSION RECEIVED</strong>
+                <p>Signal acknowledged. Response incoming within 24 hours.</p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="hud-footer">
+    <div class="hud-container">
+      <div class="footer-inner">
+        <div class="fi-left">
+          <span class="tb-logo">
+            <svg viewBox="0 0 32 32" class="tb-hex-logo"><polygon points="16,1 30,8.5 30,23.5 16,31 2,23.5 2,8.5" fill="none" stroke="var(--c1)" stroke-width="1.5"/><text y="21" x="16" text-anchor="middle" font-size="13" font-family="Orbitron" fill="var(--c1)" font-weight="700">S</text></svg>
+            <span class="tb-name">SITHONG</span>
+          </span>
+          <p>© 2026 SITHONG. ALL RIGHTS RESERVED.<br/>DESIGNED &amp; BUILT WITH ♥ FROM VIENTIANE.</p>
+        </div>
+        <div class="fi-right">
+          <span class="fi-code">END // TRANSMISSION // v7.4</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bigtext" aria-hidden="true">SITHONG</div>
+  </footer>
+
+</div><!-- /#hud -->
+
+<!-- Back to top -->
+<button class="back-top" id="backTop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<script src="sithong-main.js"></script>
+</body>
+</html>
